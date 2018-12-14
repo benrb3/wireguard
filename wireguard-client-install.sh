@@ -1,6 +1,5 @@
 #!/bin/bash
 
-
 # gather information
 clear
 echo ""
@@ -41,9 +40,9 @@ if [ $response = "y" ]; then
         apt-get -y install linux-headers-$(uname -r)
     fi
 
-# generate client keys
-client_private_key=$(wg genkey)
-client_public_key=$(echo $client_private_key | wg pubkey)
+    # generate client keys
+    client_private_key=$(wg genkey)
+    client_public_key=$(echo $client_private_key | wg pubkey)
 
 # write configuration file (here document can't be indented)
 cat << EOF >> $config_dir/wg0-client.conf
