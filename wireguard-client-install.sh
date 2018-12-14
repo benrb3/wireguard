@@ -15,7 +15,7 @@ echo -n "Enter the server port and press [Enter]:"
   read server_port
 echo -n "Enter the server's public key and press [Enter]:"
   read server_public_key
-config_dir="/home/ben/wireguard-testing"
+config_dir="/etc/wireguard"
 
 # get confirmation of configuration
 echo ""
@@ -31,9 +31,9 @@ read response
 if [ $response = "y" ]; then
 
     # install wireguard software
-    #add-apt-repository -y ppa:wireguard/wireguard
-    #apt-get -y update
-    #apt-get -y install wireguard-dkms wireguard-tools
+    add-apt-repository -y ppa:wireguard/wireguard
+    apt-get -y update
+    apt-get -y install wireguard-dkms wireguard-tools
 
     # check if linux-headers file is installed
     header_file=$(dpkg --get-selections | grep linux-headers-$(uname -r) 2>&1)
@@ -41,7 +41,7 @@ if [ $response = "y" ]; then
     result=$(echo $header_file | grep install | awk '{print $2}')
     if [ ! $result ]; then
         echo "File not installed"
-        #apt-get -y install linux-headers-$(uname -r)
+        apt-get -y install linux-headers-$(uname -r)
     fi
 
     # write configuration file (here document can't be indented)
