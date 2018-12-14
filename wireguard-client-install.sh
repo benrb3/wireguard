@@ -45,7 +45,7 @@ if [ $response = "y" ]; then
     client_public_key=$(echo $client_private_key | wg pubkey)
 
 # write configuration file (here document can't be indented)
-cat << EOF >> $config_dir/wg0-client.conf
+cat << EOF > $config_dir/wg0-client.conf
 [Interface]
 Address = $client_ip_address
 PrivateKey = $client_private_key
