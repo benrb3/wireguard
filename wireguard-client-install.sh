@@ -1,8 +1,5 @@
 #!/bin/bash
 
-# generate client keys
-client_private_key=$(wg genkey)
-client_public_key=$(echo $client_private_key | wg pubkey)
 
 # gather information
 clear
@@ -44,7 +41,11 @@ if [ $response = "y" ]; then
         apt-get -y install linux-headers-$(uname -r)
     fi
 
-    # write configuration file (here document can't be indented)
+# generate client keys
+client_private_key=$(wg genkey)
+client_public_key=$(echo $client_private_key | wg pubkey)
+
+# write configuration file (here document can't be indented)
 cat << EOF >> $config_dir/wg0-client.conf
 [Interface]
 Address = $client_ip_address
