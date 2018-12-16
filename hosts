@@ -1,0 +1,8 @@
+[lxc-containers]
+web1 ansible_host=192.168.1.101 client_vpn_address=10.200.200.5
+web2 ansible_host=192.168.1.102 client_vpn_address=10.200.200.6
+web3 ansible_host=192.168.1.103 client_vpn_address=10.200.200.7
+
+[lxc-containers:vars]
+server_public_key = aKO76sQ+98dewSfsY7LKdA6agLwYDD+j8stJsT+q+Bg=
+endpoint = 67.99.33.201:51820
