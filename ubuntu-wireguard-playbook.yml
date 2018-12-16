@@ -1,0 +1,72 @@
+- hosts: lxc-containers
+  serial: 1  #configure one client at a time
+  remote_user: <username>
+  become: true
+
+  tasks:
+    - name: Determine the running kernel release
+      command: uname -r
+      register: kernel_release
+
+    - name: Add the WireGuard PPA
+      apt_repository:
+        repo: 'ppa:wireguard/wireguard'
+
+    - name: Install wireguard and dependencies
+      apt:
+        name:
+          - linux-headers-{{ kernel_release.stdout }}
+          - linux-headers-generic
+          - wireguard-dkms
+          - wireguard-tools
+        state: present
+        autoclean: yes
+
+    - name: Generate private key
+      shell: wg genkey
+      register: client_private_key
+      changed_when: false
+
+    - name: Create variable containing the client private key
+      set_fact:
+        private_key: "{{ client_private_key.stdout }}"
+
+    - name: Generate public key
+      shell: "echo {{ private_key }} | wg pubkey"
+      register: client_public_key
+      changed_when: false
+
+    - name: Create variable containing the client public key
+      set_fact:
+        public_key: "{{ client_public_key.stdout | regex_replace('^(.*=).*$', '\\1') }}"
+
+    - name: Create configuration directory if not exists
+      file:
+        path:  /etc/wireguard
+        state: directory
+        mode:  0700
+        owner: root
+        group: root
+
+    # create configuration file
+    - name: Copy configuration file to /etc/wireguard
+      template:
+        src:   /<path>/<to>/templates/wg0-client.conf
+        dest:  /etc/wireguard/wg0-client.conf
+        owner: root
+        group: root
+        mode:  0600
+
+    - name: Enable and start wireguard
+      systemd:
+        name: "wg-quick@wg0-client"
+        enabled: yes
+        state: started
+
+    # print the public key value
+    - debug:
+        msg: "client_public_key: {{ public_key }} "
+
+    # command to run on the server to register this client
+    - debug:
+        msg: "On the server, run: wg set wg0 peer <client_public_key> allowed-ips {{ client_vpn_address }}"
