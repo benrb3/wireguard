@@ -1,4 +1,4 @@
-- hosts: lxc-containers
+- hosts: wg-clients
   serial: 1  #configure one client at a time
   remote_user: <user>
   become: true

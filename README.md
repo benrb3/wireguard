@@ -15,14 +15,12 @@ you wish to configure, nor does it enable and start the systemd unit file
 
 The second is an ansible playbook: **ubuntu-wireguard-playbook.yml**,
 which is the better of the two scripts. After cloning this repo to a
-directory on your ansible control system, edit the [lxc-containers]
-section of the hosts file to specify host IP addresses and the VPN
-address you want for each host. You'll also need to change the values of
-the server_public_key and endpoint under [lxc-containers:vars]. (The
-values shown are junk) The hosts file needs to be copied to
-/etc/ansible/hosts, or its contents merged with the hosts file that you
-probably already have in place. You will likely want to change the names
-of the sections from [lxc-containers]/[lxc-containers:vars] to something
-more appropriate. If you do this be sure to edit the first line (-
-hosts:) of the playbook. You'll definitely need to enter the correct
-'user:' in the playbook as well.
+directory on your ansible control system, edit the [wg-clients] section
+of the hosts file to specify host IP addresses and the VPN address you
+want for each host. You'll also need to change the values of the
+server_public_key and endpoint under [wg-clients:vars]. (The values shown
+are junk) The hosts file needs to be copied to /etc/ansible/hosts, or its
+contents merged with the hosts file that you probably already have in
+place. If you do this be sure to edit the first line (- hosts:) of the
+playbook. You'll definitely need to enter the correct 'user:' in the
+playbook as well.
