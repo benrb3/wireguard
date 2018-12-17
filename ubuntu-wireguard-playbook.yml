@@ -1,6 +1,6 @@
 - hosts: lxc-containers
   serial: 1  #configure one client at a time
-  remote_user: <username>
+  remote_user: <user>
   become: true
 
   tasks:
@@ -51,7 +51,7 @@
     # create configuration file
     - name: Copy configuration file to /etc/wireguard
       template:
-        src:   /<path>/<to>/templates/wg0-client.conf
+        src:   wg0-client.conf
         dest:  /etc/wireguard/wg0-client.conf
         owner: root
         group: root
